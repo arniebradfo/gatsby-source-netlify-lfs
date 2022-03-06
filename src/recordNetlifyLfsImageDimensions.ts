@@ -3,23 +3,20 @@ import * as path from 'path'
 import glob from 'glob'
 import sizeOf from 'image-size'
 
-console.log([
-    process.argv.slice(2),
-    process.cwd()
-])
-
-//here
-
 const [
-    _inFilePath, 
-    _outFilePath
+    _outFilePath = './src/netlifyLfs/netlifyLfsImageData.json',
+    _inFilePath = './gatsby-config', 
 ] = process.argv.slice(2)
 
-const cwd = process.cwd()
-const inFilePath = _inFilePath || `${cwd}/gatsby-config`
-const outFilePath = _outFilePath || `${cwd}/src/netlifyLfs/netlifyLfsImageDimensions.json`
+const inFilePath = path.resolve(_inFilePath)
+const outFilePath = path.resolve(_outFilePath)
 
-const imageTypes = [
+console.log({
+    outFilePath,
+    inFilePath,
+})
+
+const formats = [
     'jpg',
     'jpeg',
     'png',
@@ -38,11 +35,11 @@ const sourceDirectories = filesystemSources.map(filesystemSource => {
 })
 console.log(`Searching gatsby-source-filesystem directories:`, sourceDirectories);
 
-const globPattern = `{${sourceDirectories.join(',')}}/*.{${imageTypes.join(',')}}`
+const globPattern = `{${sourceDirectories.join(',')}}/*.{${formats.join(',')}}`
 // console.log('Reading glob pattern: ', globPattern);
 
-const imgDimensions = {}
 const callback = (er, files) => {
+    const imgDimensions = {}
     files.forEach((file, index) => {
         // var fileSize = fs.statSync(file).size // we can't use this during netlify's gatsby build
         var fileName = path.basename(file)

@@ -1,0 +1,29 @@
+{
+  "name": "gatsby-source-netlify-lfs",
+  "version": "0.0.1",
+  "description": "Use Netlify LFS image API with gatsby-image",
+  "main": "lib/initNetlifyLfsImageData.js",
+  "types": "lib/initNetlifyLfsImageData.d.ts",
+  "keywords": [
+    "gatsby",
+    "gatsby-plugin"
+  ],
+  "author": "James Bradford",
+  "license": "MIT",
+  "bin": {
+    "recordNetlifyLfsImageDimensions": "cli.js",
+    "lfs-img": "cli.js"
+  },
+  "scripts": {
+    "start": "tsc --watch",
+    "build": "tsc"
+  },
+  "dependencies": {
+    "glob": "^7.2.0",
+    "image-size": "^1.0.1",
+    "gatsby-plugin-image": "^2.8.1"
+  },
+  "devDependencies": {
+    "typescript": "^4.5.5"
+  }
+}

@@ -1,13 +1,5 @@
 # Netlify LFS "plugin"
 
-## TODO
-- use typescript to compile 
-- --- start here ---
-- alias this as a yarn package to test properly
-- make the lfs-img cli inputs work
-- make an npm cli script that works
-- add in the svg compile options
-
 ## Notes
 - images with lfs
   - gatsby-v2-image-netlify-lfs doesn't rehydrate correctly? YES IT DOES! Fucking Gastby devs: https://github.com/gatsbyjs/gatsby/discussions/27950#discussioncomment-129499 - spent soo long trying to fix this "error"

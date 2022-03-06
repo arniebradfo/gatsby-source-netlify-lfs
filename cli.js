@@ -1,3 +1,3 @@
 #!/usr/bin/env node
 
-require(`./lib/recordNetlifyLfsImageDimensions.js`)
+require(`./lib/recordNetlifyLfsImageData.js`)

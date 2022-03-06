@@ -3,7 +3,7 @@ import { getImageData, IGatsbyImageData, IGetImageDataArgs, IUrlBuilderArgs } fr
 
 export type IGetNetlifyLfsImageDataArgs = Omit<IGetImageDataArgs, ('urlBuilder' | 'baseUrl')> & {
     /** the publicURL of the file from graphql */
-    publicURL: string,
+    publicURL: string, // getSrc()? https://www.gatsbyjs.com/docs/reference/built-in-components/gatsby-plugin-image/#getsrc
     /** manually defined img sizes attribute */
     sizes?: string,
 }

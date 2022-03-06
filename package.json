@@ -11,8 +11,7 @@
   "author": "James Bradford",
   "license": "MIT",
   "bin": {
-    "recordNetlifyLfsImageDimensions": "cli.js",
-    "lfs-img": "cli.js"
+    "netlfs": "cli.js"
   },
   "scripts": {
     "start": "tsc --watch",

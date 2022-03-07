@@ -9,10 +9,10 @@ export type IGetNetlifyLfsImageDataArgs = Omit<IGetImageDataArgs, ('urlBuilder' 
 }
 export type IGetNetlifyLfsImageDataDefaultArgs = Omit<IGetNetlifyLfsImageDataArgs, 'publicURL'> & {}
 
-export const initNetlifyLfsImageData = (imgDimensions?: ImgDimensions, defaultArgs: IGetNetlifyLfsImageDataDefaultArgs = {}) => (
-    (args: IGetNetlifyLfsImageDataArgs) => getNetlifyLfsImageData(imgDimensions, { ...defaultArgs, ...args })
+export const initNetlifyLfsImageData = (imageData?: ImageData, defaultArgs: IGetNetlifyLfsImageDataDefaultArgs = {}) => (
+    (args: IGetNetlifyLfsImageDataArgs) => getNetlifyLfsImageData(imageData, { ...defaultArgs, ...args })
 )
-const getNetlifyLfsImageData = (imgDimensions: ImgDimensions, args: IGetNetlifyLfsImageDataArgs): IGatsbyImageData => {
+const getNetlifyLfsImageData = (imgDimensions: ImageData, args: IGetNetlifyLfsImageDataArgs): IGatsbyImageData => {
 
     const {
         publicURL: baseUrl,
@@ -80,7 +80,7 @@ export type ImgDimension = {
     // aspectRatio: number // float
 }
 type FileName = string
-export type ImgDimensions = Record<FileName, ImgDimension>
+export type ImageData = Record<FileName, ImgDimension>
 
 const basename = (path: string): FileName => path.split('/').pop();
 const fileType = (fileName: FileName) => fileName.split('.').pop();

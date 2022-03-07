@@ -1,18 +1,98 @@
-# Netlify LFS "plugin"
+# Gatsby Netlify LFS Source Plugin
+Host image-heavy [Gatsby](https://www.gatsbyjs.com/) for _free_[\*](https://www.netlify.com/pricing/#add-ons-large-media) using [Git LFS](https://git-lfs.github.com/) & .
 
-## Notes
-- images with lfs
-  - gatsby-v2-image-netlify-lfs doesn't rehydrate correctly? YES IT DOES! Fucking Gastby devs: https://github.com/gatsbyjs/gatsby/discussions/27950#discussioncomment-129499 - spent soo long trying to fix this "error"
-  - videos are absent after netlify build...
-  - gifs don't retain after being passed through the api
-  - netlify gatsby build doesn't have access to image data: https://github.com/gatsbyjs/gatsby/issues/12438#issuecomment-474113335
-  - write a replacement for `gatsby-plugin-sharp` and `gatsby-transformer-sharp` that uses netlify [Netlify Large Media Image Transforms](https://docs.netlify.com/large-media/transform-images/#request-transformations)
-  - preprocess all image files into a `media-dimensions.json` object with height width and aspect ratio
-    - look in `gatsby-config.js` for plugins `gatsby-source-filesystem` options.path and builds source folders based on that
-    - commit the `media-dimensions.json` config file and netlify gatsby build looks at it during build time to generate request transforms responsive images
-  - uses native `gatsby-image`/`<GatsbyImage/>` component
-    - https://www.gatsbyjs.com/docs/images-and-files/
-    - https://www.gatsbyjs.com/plugins/gatsby-image/
-    - https://www.gatsbyjs.com/plugins/gatsby-plugin-sharp/
-    - https://www.gatsbyjs.com/plugins/gatsby-transformer-sharp/
+## How it works
+
+### The Problem
+One of Gatsby's primary draws is how it [handles images](https://using-gatsby-image.gatsbyjs.org/) with [`gatsby-plugin-image`](https://www.gatsbyjs.com/plugins/gatsby-plugin-image/). Gatsby can also be [deployed for free from a git repo via Netlify](https://www.netlify.com/blog/2016/02/24/a-step-by-step-guide-gatsby-on-netlify/). Unfortunately, git repos cannot contain the large numbers of image or binary files required for an image-heavy Gatsby site. Image-heavy Gatsby sites would then require a content managements system and possibly paid hosting.
+
+### Netlify Hosting with Git LFS
+This plugin solves the above problem by storing the large files using Git LFS [Git LFS (**L**arge **F**ile  **S**torage)](https://git-lfs.github.com/), and serving those files to a Gatsby site via [Netlify Large Media](https://docs.netlify.com/large-media/setup/). It replaces the need for `gatsby-plugin-sharp` and `gatsby-transformer-sharp` with the Netlify LFS [Transform Images API](https://docs.netlify.com/large-media/transform-images/) by providing an alternate method of creating the `image` prop for the `<GatsbyImage/>` component.
+
+### Drawbacks
+The `gastby build` command [doesn't have access to the git LFS images at build time](https://github.com/gatsbyjs/gatsby/issues/12438#issuecomment-474113335). This limitation requires us to preprocess all the build-time data we need from our lfs images, and then commit that data as a file. 
+
+## Getting Started
+
+### 1. Configure Git LFS and Netlify
+1. [Configure Git LFS](https://git-lfs.github.com/) by following the "Getting Started" instructions on the linked page.
+2. [Setup Netlify Large Media](https://docs.netlify.com/large-media/setup/) by following the instructions on the linked page.
+
+### 2. Configure the Gatsby Plugin
+1. install the plugin
+    ```bash
+    npm install gatsby-source-netlify-lfs
+    ```
+2. Optionally - create a plugins config in `gatsby-config.js`. This plugin will work without this config, but this is where overrides can be providied to the `netfls` script.
+    ```js
+    module.exports = {
+      plugins: [
+        {
+          source: 'gatsby-source-netlify-lfs'
+          options: {
+            // 'paths' defaults to include all 'gatsby-source-filesystem' config paths, but they can be manually overridden here
+            paths: [
+              `${__dirname}/src/blog/images`,
+              `${__dirname}/content/images`
+            ]
+          }
+        }
+      ],
+    }
+    ```
+3. Setup a npm script to run the `netfls` preprocess cli script
+    ```json
+    {
+      "scripts":{
+        "netfls": "netfls"
+      }
+    }
+    ```
+4. `npm run netlfs` to generate the `./src/netlifyLfs/netlifyLfsImageData.json` and **commit this file**. It's required by gatsby build when deployed to netlify. This file must be regenerated _every time_ an image is added or removed from the lfs tracked repo. You may want to add this as a pre-commit hook or as part of a watch command.
+
+
+### 3. Use with `<GatsbyImage/>` in React
+1. Create a file `./src/netlifyLfs/getNetlifyLfsImage.js` that is some version of the example below:
+    ```js
+    import { initNetlifyLfsImageData } from "gatsby-source-netlify-lfs";
+    import imageData from "./netlifyLfsImageData.json";
+
+    /** default IGetNetlifyLfsImageArgs */
+    const defaultArgs = {
+        // backgroundColor: 'hsl(0deg 0% 1%)',
+    };
+
+    /** use in place of getImage() from "gatsby-plugin-image" */
+    export const getNetlifyLfsImage = initNetlifyLfsImageData(imageData, defaultArgs);
+    ```
+2. Use the exported `getNetlifyLfsImage()` in place of `getImage()`
+    ```jsx
+    const ImageExample = (props) => {
+      // get the b
+      const data = useStaticQuery(graphql`{
+        exampleImage: file(absolutePath: { regex: "/ExampleImageName.png/" }) { publicURL })
+      }`);
+      const image = getNetlifyLfsImage({
+        publicURL: data.exampleImage.publicURL
+        backgroundColor: 'hsl(0deg 0% 1%)',
+        // other options - see 'getNetlifyLfsImage args' below
+      })
+      return (
+        <GatsbyImage image={image} alt={'Netlify LFS example Image'}/>
+      )
+    }
+    ```
+
+## Docs
+### gatsby-config.js Options
+...later
+
+### getNetlifyLfsImage args
+...later, see linked typescript def in the meantime.
+
+
+
+
+
+
 

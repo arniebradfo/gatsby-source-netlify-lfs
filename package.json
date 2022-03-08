@@ -1,15 +1,29 @@
 {
   "name": "gatsby-source-netlify-lfs",
   "version": "0.0.1",
-  "description": "Use Netlify LFS image API with gatsby-image",
-  "main": "lib/initNetlifyLfsImageData.js",
-  "types": "lib/initNetlifyLfsImageData.d.ts",
-  "keywords": [
-    "gatsby",
-    "gatsby-plugin"
-  ],
+  "description": "Use Netlify's Git LFS Transform Image API with gatsby-image",
   "author": "James Bradford",
   "license": "MIT",
+  "keywords": [
+    "gatsby",
+    "gatsby-plugin",
+    "netlify",
+    "git",
+    "lfs"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/arniebradfo/gatsby-source-netlify-lfs"
+  },
+  "main": "lib/initNetlifyLfsImageData.js",
+  "types": "lib/initNetlifyLfsImageData.d.ts",
+  "files": [
+    "lib/**.{js,ts}",
+    "cli.js",
+    "gatsby-node.js",
+    "package.json",
+    "README.md"
+  ],
   "bin": {
     "netlfs": "cli.js"
   },

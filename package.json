@@ -9,7 +9,8 @@
     "gatsby-plugin",
     "netlify",
     "git",
-    "lfs"
+    "lfs",
+    "images"
   ],
   "repository": {
     "type": "git",

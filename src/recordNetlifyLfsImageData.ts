@@ -30,8 +30,7 @@ glob(
     `${globPaths}/*.{${config.formats.join(',')}}`,
     // generate image data
     (er, files) => {
-        console.log(config)
-        // console.log(`Searching gatsby-source-filesystem directories:`, sourcePaths);
+        console.log(`Recording LFS Data from directories:`, config.paths);
         const imageData = {}
         files.forEach((file) => {
             var fileName = path.basename(file)

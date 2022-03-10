@@ -22,11 +22,11 @@ const getNetlifyLfsImageData = (imgDimensions: ImageData, args: IGetNetlifyLfsIm
     const imgFileName = basename(baseUrl)
     const imgFileType = fileType(imgFileName).toLowerCase()
 
-    const imgDimension: ImgDimension | undefined = imgDimensions[imgFileName]
+    const imgDimension: ImageDatum | undefined = imgDimensions[imgFileName]
     if (imgDimension == null)
         return null // TODO
 
-    const { h: sourceHeight, w: sourceWidth } = imgDimension
+    const { h: sourceHeight, w: sourceWidth, p: placeholderURL } = imgDimension
 
     const gatsbyImageData = getImageData({
         pluginName: `gatsby-source-netlify-lfs`,
@@ -35,6 +35,7 @@ const getNetlifyLfsImageData = (imgDimensions: ImageData, args: IGetNetlifyLfsIm
         sourceHeight,
         sourceWidth,
         aspectRatio: sourceWidth / sourceHeight,
+        placeholderURL,
         ...args,
     })
 
@@ -74,13 +75,19 @@ function nf_resize(
     return urlParams;
 }
 
-export type ImgDimension = {
-    h: number // int
-    w: number  // int
-    // aspectRatio: number // float
+// TODO: rename
+export type ImageDatum = {
+    /** sourceHeight */
+    h: number,
+    /** sourceWidth */
+    w: number,
+    /** placeholderURL */
+    p?: string,
+    /** backgroundColor */
+    b?: string,
 }
 type FileName = string
-export type ImageData = Record<FileName, ImgDimension>
+export type ImageData = Record<FileName, ImageDatum>
 
 const basename = (path: string): FileName => path.split('/').pop();
 const fileType = (fileName: FileName) => fileName.split('.').pop();

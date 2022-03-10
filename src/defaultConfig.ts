@@ -11,18 +11,19 @@ export interface GatsbySourceNetlifyLfsConfig {
         /** [base64Width](https://www.gatsbyjs.com/plugins/gatsby-plugin-sharp/#toformatbase64) */
         width?: number;
         /** [toFormatBase64](https://www.gatsbyjs.com/plugins/gatsby-plugin-sharp/#toformatbase64) */
-        toFormat?: "jpg" | "png" | "";
+        toFormat?: FormatBase64;
     };
     /** [Potrace Parameters](https://www.npmjs.com/package/potrace#parameters) */
     tracedSVGOptions?: Record<string, any>;
     /** the filetype of the output netlifyLfsImageData file */
-    dataFileFormat?: 'js' | 'ts' | 'json';
+    dataFileFormat?: DataFileFormat;
 }
 
+export type FormatBase64 = "jpg" | "png" | "";
+export type DataFileFormat = 'js' | 'ts' | 'json';
+export type Placeholder = "dominantColor" | "blurred" | "tracedSVG" | "none";
 export type ImageFormat = "jpg" | "jpeg" | "png" | "svg" | "gif";
 const defaultFormats: ImageFormat[] = ["jpg", "jpeg", "png", "svg", "gif"];
-
-export type Placeholder = "dominantColor" | "blurred" | "tracedSVG" | "none";
 
 export const defaultConfig: GatsbySourceNetlifyLfsConfig = {
     // paths: [], // Defaults to paths from 'gatsby-source-filesystem'
@@ -30,7 +31,7 @@ export const defaultConfig: GatsbySourceNetlifyLfsConfig = {
     placeholder: "none",
     blurredOptions: {
         width: 20,
-        toFormat: "",
+        toFormat: '',
     },
     tracedSVGOptions: {},
     dataFileFormat: "json"

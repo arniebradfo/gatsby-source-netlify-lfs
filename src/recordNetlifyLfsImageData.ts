@@ -3,6 +3,7 @@ import * as path from 'path'
 import glob from 'glob'
 import { defaultConfig, GatsbySourceNetlifyLfsConfig } from './defaultConfig'
 import { processImage } from './generateBase64'
+import cliProgress from 'cli-progress'
 
 const gatsbyConfigFilePath = path.resolve('./gatsby-config')
 const netlifyLfsImageDataPath = path.resolve('./src/netlifyLfs/netlifyLfsImageData.json')
@@ -41,8 +42,8 @@ glob(
     async (error, matches) => {
         console.log(`Recording LFS Data of ${matches.length} files from directories:`, config.paths);
 
-        // TODO: https://www.npmjs.com/package/cli-progress
-        let progress = 0
+        const progressBar = new cliProgress.SingleBar({}, cliProgress.Presets.shades_classic);
+        progressBar.start(matches.length, 0)
 
         const imageData: ImageData = {}
         await Promise.all(matches.map(async (file, index) => {
@@ -55,16 +56,17 @@ glob(
 
             const usePlaceholderImage = config.placeholder === 'blurred' || config.placeholder === 'tracedSVG'
             const useDominantColor = config.placeholder === 'dominantColor'
+
             imageData[fileName] = {
                 h: data.height,
                 w: data.width,
                 p: usePlaceholderImage ? data.src : undefined,
                 b: useDominantColor ? data.dominantColor : undefined,
             };
-            progress++
-            console.log(`${progress} of ${matches.length}: ${fileName}`);
 
+            progressBar.increment()
         }))
+        progressBar.stop();
 
         fs.writeFile(netlifyLfsImageDataPath, JSON.stringify(imageData), 'utf8', () => {
             console.log(

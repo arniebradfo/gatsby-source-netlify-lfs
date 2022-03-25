@@ -1,9 +1,8 @@
 import * as fs from 'fs'
 import * as path from 'path'
 import glob from 'glob'
-import sizeOf from 'image-size'
 import { defaultConfig, GatsbySourceNetlifyLfsConfig } from './defaultConfig'
-import { generateBase64 } from './generateBase64'
+import { processImage } from './generateBase64'
 import { ImageData } from './initNetlifyLfsImageData'
 
 const gatsbyConfigFilePath = path.resolve('./gatsby-config')
@@ -33,32 +32,37 @@ glob(
     // generate image data
     async (error, matches) => {
         console.log(`Recording LFS Data of ${matches.length} files from directories:`, config.paths);
-        
+
         // TODO: https://www.npmjs.com/package/cli-progress
 
         const imageData: ImageData = {}
-        await Promise.all(matches.map(async (file) => {
+        let progress = 0
+        await Promise.all(matches.map(async (file, index) => {
             var fileName = path.basename(file)
-            const test = await generateBase64({ file })
 
-            var dimensions = sizeOf(file)
+            const data = await processImage({ file }) // TODO: add options
 
-            if (imageData[`${fileName}`] != null)
+            if (imageData[fileName] != null)
                 console.warn(`All media files must have a unique name. '${fileName}' is duplicated and is being overwritten`)
 
-            imageData[`${fileName}`] = {
-                h: dimensions.height,
-                w: dimensions.width,
-                p: test.src
+            imageData[fileName] = {
+                h: data.height,
+                w: data.width,
+                p: data.src,
+                b: data.dominantColor
             };
+            progress++
+            console.log(`${progress} of ${matches.length}: ${fileName}`);
+
         }))
 
-        fs.writeFileSync(netlifyLfsImageDataPath, JSON.stringify(imageData), 'utf-8')
+        fs.writeFile(netlifyLfsImageDataPath, JSON.stringify(imageData), 'utf8', () => {
+            console.log(
+                `DONE! Mapped dimensions for ${Object.keys(imageData).length} media files in:\n`,
+                path.resolve(netlifyLfsImageDataPath), `\n`,
+                `Please commit this file.`
+            )
+        })
 
-        console.log(
-            `DONE! Mapped dimensions for ${Object.keys(imageData).length} media files in:\n`,
-            path.resolve(netlifyLfsImageDataPath), `\n`,
-            `Please commit this file.`
-        )
     }
 );

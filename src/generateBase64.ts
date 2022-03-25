@@ -3,7 +3,7 @@ import * as fs from 'fs'
 import { defaultConfig, GatsbySourceNetlifyLfsConfig } from './defaultConfig'
 
 /** [gatsbyPluginSharp Docs](../node_modules/gatsby-plugin-sharp/index.js)  */
-export async function generateBase64({
+export async function processImage({
   file,
   options,
   // reporter
@@ -38,6 +38,13 @@ export async function generateBase64({
     // reportError(`Failed to process image ${file.absolutePath}`, err, reporter);
     return null;
   }
+
+  const {
+    width,
+    height,
+    density,
+    format
+  } = await pipeline.metadata();
 
   // if (options.trim) {
   //   pipeline = pipeline.trim(options.trim);
@@ -86,8 +93,13 @@ export async function generateBase64({
   //   }
   // }
 
-  let buffer;
-  let info;
+  // const {
+  //   dominant
+  // } = await pipeline.stats(); // Fallback in case sharp doesn't support dominant
+
+  let buffer: Buffer;
+  let info: sharp.OutputInfo;
+  let dominant: RGB;
 
   try {
     const result = await pipeline.toBuffer({
@@ -95,18 +107,35 @@ export async function generateBase64({
     });
     buffer = result.data;
     info = result.info;
+    const stats = await sharp(result.data).stats()
+    dominant = stats.dominant
   } catch (err) {
-    // reportError(`Failed to process image ${file.absolutePath}.
-    // It is probably corrupt, so please try replacing it.  If it still fails, please open an issue with the image attached.`, err, reporter);
+    console.warn(`Failed to process image ${file}. It is probably corrupt, so please try replacing it.`);
     return null;
   }
+  const dominantColor = dominant ? rgbToHex(dominant.r, dominant.g, dominant.b) : `rgba(0,0,0,0.5)`;
+
 
   const base64output = {
     src: `data:image/${info.format};base64,${buffer.toString(`base64`)}`,
-    width: info.width,
-    height: info.height,
-    aspectRatio: info.width / info.height,
-    originalName: file//.base
+    width,
+    height,
+    density,
+    format,
+    originalName: file,
+    dominantColor
   };
+  // console.log(base64output);
+
   return base64output;
+}
+
+function rgbToHex(red, green, blue) {
+  return `#${(blue | green << 8 | red << 16 | 1 << 24).toString(16).slice(1)}`;
+}
+
+type RGB = {
+  r: number;
+  g: number;
+  b: number;
 }

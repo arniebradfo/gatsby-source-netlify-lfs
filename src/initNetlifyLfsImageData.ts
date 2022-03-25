@@ -26,7 +26,7 @@ const getNetlifyLfsImageData = (imgDimensions: ImageData, args: IGetNetlifyLfsIm
     if (imgDimension == null)
         return null // TODO
 
-    const { h: sourceHeight, w: sourceWidth, p: placeholderURL } = imgDimension
+    const { h: sourceHeight, w: sourceWidth, p: placeholderURL, b: backgroundColor } = imgDimension
 
     const gatsbyImageData = getImageData({
         pluginName: `gatsby-source-netlify-lfs`,
@@ -36,6 +36,7 @@ const getNetlifyLfsImageData = (imgDimensions: ImageData, args: IGetNetlifyLfsIm
         sourceWidth,
         aspectRatio: sourceWidth / sourceHeight,
         placeholderURL,
+        backgroundColor,
         ...args,
     })
 

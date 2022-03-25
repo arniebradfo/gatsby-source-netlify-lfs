@@ -1,6 +1,6 @@
 import { getImageData } from "gatsby-plugin-image"
 import type { IGatsbyImageData, IGetImageDataArgs, IUrlBuilderArgs } from "gatsby-plugin-image"
-import { FileName, ImageDatum } from './recordNetlifyLfsImageData'
+import { FileName, ImageDatum, ImageData } from './recordNetlifyLfsImageData'
 
 export type IGetNetlifyLfsImageDataArgs = Omit<IGetImageDataArgs, ('urlBuilder' | 'baseUrl')> & {
     /** the publicURL of the file from graphql */
@@ -76,9 +76,6 @@ function nf_resize(
         urlParams += `&h=${height}`
     return urlParams;
 }
-
-// TODO: rename
-
 
 const basename = (path: string): FileName => path.split('/').pop();
 const fileType = (fileName: FileName) => fileName.split('.').pop();

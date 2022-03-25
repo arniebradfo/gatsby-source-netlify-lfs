@@ -1,17 +1,12 @@
 import sharp, { Sharp } from "sharp";
 import * as fs from 'fs'
-import { defaultConfig, GatsbySourceNetlifyLfsConfig } from './defaultConfig'
+import { GatsbySourceNetlifyLfsConfig } from './defaultConfig'
 
 /** [gatsbyPluginSharp Docs](../node_modules/gatsby-plugin-sharp/index.js)  */
 export async function processImage(
   file: string,
   options: GatsbySourceNetlifyLfsConfig
 ) {
-
-  // options = {
-  //   ...defaultConfig,
-  //   ...options,
-  // }
 
   let pipeline: Sharp;
 

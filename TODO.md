@@ -1,4 +1,12 @@
 # TODO
+- [placeholderOptions](https://www.gatsbyjs.com/docs/reference/built-in-components/gatsby-plugin-image/#placeholder)
+  - [tracedSVG](https://www.gatsbyjs.com/plugins/gatsby-plugin-sharp#tracedsvg)
+- [transformOptions](https://www.gatsbyjs.com/docs/reference/built-in-components/gatsby-plugin-image/#transformoptions) with css filters
+  - [grayscale](https://www.gatsbyjs.com/plugins/gatsby-plugin-sharp#grayscale) 
+  - [duotone](https://www.gatsbyjs.com/plugins/gatsby-plugin-sharp#duotone)
+  - https://cssduotone.com/
+- output `netlifyLfsImageData.json` as optional formats: `json`, `cjs`, `es6`, or `ts`
+- automatically create `getNetlifyLfsImage.js` if it doesn't exist?
 
 ## Release
 - use typescript to compile 
@@ -15,22 +23,24 @@
 ## Improve
 - support options in `gatsby-config.js` related to
   - `gatsby-plugin-image`
-    - –––
     - [default options](https://www.gatsbyjs.com/plugins/gatsby-plugin-image#customizing-the-default-options)?
   - `gatsby-plugin-sharp`
     - [placeholderOptions](https://www.gatsbyjs.com/docs/reference/built-in-components/gatsby-plugin-image/#placeholder)
       - [base64](https://www.gatsbyjs.com/plugins/gatsby-plugin-sharp#toformatbase64)
       - dominantColor
       - none
+      - –––
       - [tracedSVG](https://www.gatsbyjs.com/plugins/gatsby-plugin-sharp#tracedsvg)
     - [transformOptions](https://www.gatsbyjs.com/docs/reference/built-in-components/gatsby-plugin-image/#transformoptions) with css filters
       - [grayscale](https://www.gatsbyjs.com/plugins/gatsby-plugin-sharp#grayscale) 
       - [duotone](https://www.gatsbyjs.com/plugins/gatsby-plugin-sharp#duotone)
       - https://cssduotone.com/
+  - output `netlifyLfsImageData.json` as optional formats: `json`, `cjs`, `es6`, or `ts`
 - `resolve: 'gatsby-source-netlify-lfs` should check during gatsby-build to see if `netlifyLfsImageDimensions.json` exists
   - in the short term, it should just log something...
 - automatically create `getNetlifyLfsImage.js` if it doesn't exist
   - provide commented defaultArgs based on: [default options](https://www.gatsbyjs.com/plugins/gatsby-plugin-image#customizing-the-default-options)
+
 
 
 ## Notes

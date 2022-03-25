@@ -1,6 +1,6 @@
 {
   "name": "gatsby-source-netlify-lfs",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Use Netlify's Git LFS Transform Image API with gatsby-image",
   "author": "James Bradford",
   "license": "MIT",

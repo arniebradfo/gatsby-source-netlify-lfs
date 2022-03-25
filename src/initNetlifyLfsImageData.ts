@@ -1,4 +1,5 @@
 import { getImageData, IGatsbyImageData, IGetImageDataArgs, IUrlBuilderArgs } from "gatsby-plugin-image"
+import { FileName, ImageDatum } from './recordNetlifyLfsImageData'
 
 
 export type IGetNetlifyLfsImageDataArgs = Omit<IGetImageDataArgs, ('urlBuilder' | 'baseUrl')> & {
@@ -77,18 +78,7 @@ function nf_resize(
 }
 
 // TODO: rename
-export type ImageDatum = {
-    /** sourceHeight */
-    h: number,
-    /** sourceWidth */
-    w: number,
-    /** placeholderURL */
-    p?: string,
-    /** backgroundColor */
-    b?: string,
-}
-type FileName = string
-export type ImageData = Record<FileName, ImageDatum>
+
 
 const basename = (path: string): FileName => path.split('/').pop();
 const fileType = (fileName: FileName) => fileName.split('.').pop();

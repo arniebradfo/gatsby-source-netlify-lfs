@@ -1,6 +1,6 @@
-import { getImageData, IGatsbyImageData, IGetImageDataArgs, IUrlBuilderArgs } from "gatsby-plugin-image"
+import { getImageData } from "gatsby-plugin-image"
+import type { IGatsbyImageData, IGetImageDataArgs, IUrlBuilderArgs } from "gatsby-plugin-image"
 import { FileName, ImageDatum } from './recordNetlifyLfsImageData'
-
 
 export type IGetNetlifyLfsImageDataArgs = Omit<IGetImageDataArgs, ('urlBuilder' | 'baseUrl')> & {
     /** the publicURL of the file from graphql */

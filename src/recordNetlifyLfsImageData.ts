@@ -6,7 +6,8 @@ import { processImage } from './generateBase64'
 import cliProgress from 'cli-progress'
 
 const gatsbyConfigFilePath = path.resolve('./gatsby-config')
-const netlifyLfsImageDataPath = path.resolve('./src/netlifyLfs/netlifyLfsImageData.json')
+const netlifyLfsImageDataPath = path.resolve('./src/netlifyLfs')
+const netlifyLfsImageDataFilename = 'netlifyLfsImageData.json'
 
 // create config object
 const gatsbyConfig = require(gatsbyConfigFilePath)
@@ -24,8 +25,8 @@ let config: GatsbySourceNetlifyLfsConfig = {
 // create default paths if not defined
 if (config.paths == null) {
     config.paths = gatsbyConfig.plugins
-    .filter(plugin => plugin.resolve === 'gatsby-source-filesystem')
-    .map(sourceFilesystem => sourceFilesystem.options.path)
+        .filter(plugin => plugin.resolve === 'gatsby-source-filesystem')
+        .map(sourceFilesystem => sourceFilesystem.options.path)
 }
 
 // console.log(config);
@@ -68,14 +69,15 @@ glob(
         }))
         progressBar.stop();
 
-        fs.writeFile(netlifyLfsImageDataPath, JSON.stringify(imageData), 'utf8', () => {
+        await fs.mkdir(netlifyLfsImageDataPath, { recursive: true }, () => undefined)
+        await fs.writeFile(netlifyLfsImageDataPath + '/' + netlifyLfsImageDataFilename, JSON.stringify(imageData), 'utf8', () => {
             console.log(
                 `DONE! Mapped dimensions for ${Object.keys(imageData).length} media files in:\n`,
                 path.resolve(netlifyLfsImageDataPath), `\n`,
                 `Please commit this file.`
             )
         })
-
+        
     }
 );
 

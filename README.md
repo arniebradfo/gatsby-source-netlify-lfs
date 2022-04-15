@@ -58,7 +58,7 @@ The `gastby build` command [doesn't have access to the git LFS images at build t
       }
     }
     ```
-4. `npm run netlfs` to generate the `./src/netlifyLfs/netlifyLfsImageData.json` and **commit this file**. It's required by gatsby build when deployed to netlify. This file must be regenerated _every time_ an image is added or removed from the LFS tracked repo. You may want to add this as a pre-commit hook or as part of a watch command.
+4. `npm run netlfs` to generate the `./src/netlifyLfs/netlifyLfsImageData.json` and **commit this file**. It's required by gatsby build when deployed to netlify. __This file must be regenerated _every time_ an image is added or removed from the LFS tracked repo.__ You may want to add this as a pre-commit hook or as part of a watch command.
 
 
 ### 3. Use with `<GatsbyImage/>` in React

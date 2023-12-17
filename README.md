@@ -10,7 +10,7 @@ One of Gatsby's primary draws is how it [handles images](https://using-gatsby-im
 This plugin solves the above problem by storing large files (images and other media) using [Git LFS (**L**arge **F**ile  **S**torage)](https://git-lfs.github.com/), and serving those large image files to a Gatsby site via [Netlify Large Media](https://docs.netlify.com/large-media/setup/). It replaces the need for `gatsby-plugin-sharp` and `gatsby-transformer-sharp` with the Netlify LFS [Transform Images API](https://docs.netlify.com/large-media/transform-images/) by providing an alternate method of creating the `image` prop for the `<GatsbyImage/>` component.
 
 ### Drawbacks
-The `gastby build` command [doesn't have access to the git LFS images at build time](https://github.com/gatsbyjs/gatsby/issues/12438#issuecomment-474113335). This limitation requires us to preprocess all the build-time data we need from our lfs images, and then commit that data as a file. This file must be regenerated _every time_ an image is added or removed from the LFS tracked repo.
+The `gatsby build` command [doesn't have access to the git LFS images at build time](https://github.com/gatsbyjs/gatsby/issues/12438#issuecomment-474113335). This limitation requires us to preprocess all the build-time data we need from our lfs images, and then commit that data as a file. This file must be regenerated _every time_ an image is added or removed from the LFS tracked repo.
 
 ## Getting Started
 
@@ -23,42 +23,45 @@ The `gastby build` command [doesn't have access to the git LFS images at build t
     ```bash
     npm install gatsby-source-netlify-lfs
     ```
-2. Optionally - create a plugins config in `gatsby-config.js`. This plugin will work without this config, but this is where overrides can be providied to the `netfls` script.
+2. Optionally - create a plugins config in `gatsby-config.js`. This plugin will work without this config, but this is where overrides can be provided to the `netlfs` script.
     ```js
     module.exports = {
       plugins: [
         {
           resolve: 'gatsby-source-netlify-lfs',
           options: {
+
             // 'paths' defaults to include all 'gatsby-source-filesystem' config paths, but they can be manually overridden here
             paths: [
               `${__dirname}/src/blog/images`,
               `${__dirname}/content/images`,
             ],
 
+            /*
             // limit the formats that are included
-            // formats: ['jpg', 'png'], //: ('jpg' | 'jpeg' | 'png' | 'svg' | 'gif')[]
+            formats: ['jpg', 'png'], //: ('jpg' | 'jpeg' | 'png' | 'svg' | 'gif')[]
             
             // placeholder type
-            // placeholder: 'blurred',  //: 'dominantColor' | 'blurred' | 'none';
-            // blurredOptions: {
-            //   width: 40,
-            //   toFormat: 'jpg',
-            // }
+            placeholder: 'blurred',  //: 'dominantColor' | 'blurred' | 'none';
+            blurredOptions: {
+              width: 40,
+              toFormat: 'jpg',
+            }
+            */
           }
         }
       ],
     }
     ```
-3. Setup a npm script in your `package.json` to run the `netfls` preprocess cli script
+3. Setup a npm script in your `package.json` to run the `netlfs` preprocess cli script
     ```json
     {
       "scripts":{
-        "netfls": "netfls"
+        "netlfs": "netlfs"
       }
     }
     ```
-4. `npm run netlfs` to generate the `./src/netlifyLfs/netlifyLfsImageData.json` and **commit this file**. It's required by gatsby build when deployed to netlify. This file must be regenerated _every time_ an image is added or removed from the LFS tracked repo. You may want to add this as a pre-commit hook or as part of a watch command.
+4. `npm run netlfs` to generate the `./src/netlifyLfs/netlifyLfsImageData.json` and **commit this file**. It's required by gatsby build when deployed to netlify. __This file must be regenerated _every time_ an image is added or removed from the LFS tracked repo.__ You may want to add this as a pre-commit hook or as part of a watch command.
 
 
 ### 3. Use with `<GatsbyImage/>` in React

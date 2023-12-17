@@ -1,6 +1,9 @@
 # Gatsby Netlify LFS Source Plugin
 Host image-heavy [Gatsby](https://www.gatsbyjs.com/) sites on [Netlify](https://www.netlify.com/with/gatsby/) for _free_[\*](https://www.netlify.com/pricing/#add-ons-large-media) using [Git LFS](https://git-lfs.github.com/) & [Netlify Large Media](https://docs.netlify.com/large-media/setup/).
 
+## Netlify LFS is Deprecated 
+Read the [blog post](https://answers.netlify.com/t/large-media-feature-deprecated-but-not-removed/100804)
+
 ## How it works
 
 ### The Problem

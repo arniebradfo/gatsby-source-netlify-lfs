@@ -23,7 +23,7 @@ The `gastby build` command [doesn't have access to the git LFS images at build t
     ```bash
     npm install gatsby-source-netlify-lfs
     ```
-2. Optionally - create a plugins config in `gatsby-config.js`. This plugin will work without this config, but this is where overrides can be providied to the `netfls` script.
+2. Optionally - create a plugins config in `gatsby-config.js`. This plugin will work without this config, but this is where overrides can be providied to the `netlfs` script.
     ```js
     module.exports = {
       plugins: [
@@ -50,11 +50,11 @@ The `gastby build` command [doesn't have access to the git LFS images at build t
       ],
     }
     ```
-3. Setup a npm script in your `package.json` to run the `netfls` preprocess cli script
+3. Setup a npm script in your `package.json` to run the `netlfs` preprocess cli script
     ```json
     {
       "scripts":{
-        "netfls": "netfls"
+        "netlfs": "netlfs"
       }
     }
     ```
